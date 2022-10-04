@@ -1,14 +1,19 @@
 /**@jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
+import { useState } from 'react';
 
 const CardStyle = css`
     margin: 100px auto 0;
     width: 400px;
     height: 600px;
     perspective: 1000px;
+    &:hover{
+        transform: scale(0.9);
+    }
+    transition: 0.5s;
 `;
 
-const CardInner = css`
+const CardInner = props => css`
     width: 100%;
     height: 100%;
     transition: transform 1s;
@@ -16,9 +21,7 @@ const CardInner = css`
     cursor: pointer;
     position: relative;
     border: 1px solid black;
-    &:hover{
-        transform: rotateY(180deg);
-    }
+    transform: ${props.flipped ? "rotateY(180deg)" : "none"};
 `;
 
 const CardFace = css`
@@ -59,9 +62,14 @@ const cardHeader = css`
 `;
 
 function Card(){
+    const [flipped, setFlipped] = useState(false);
+    const handleFlip = () => {
+        setFlipped((current) => !current);
+        console.log(flipped);
+    }
     return(
         <div className="card" css={CardStyle}>
-            <div className="card-inner" css={CardInner}>
+            <div className="card-inner" css={CardInner({flipped})} onClick={handleFlip}>
                 <div className="card-front" css={[CardFace, CardFront]}>
                     <h2>Card Front</h2>
                 </div>
